@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35004.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E2629311-E05A-42C5-98A1-F757BCA32ABC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{E2519492-18B3-4047-B385-4E05906BE76A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web", "web", "{B84C8110-47B2-49AE-8356-B9EA2E05C222}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YMYPHibritGroup.API", "YMYPHibritGroup.API\YMYPHibritGroup.API.csproj", "{298316E7-BACA-4F05-A774-685865978A1A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{298316E7-BACA-4F05-A774-685865978A1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{298316E7-BACA-4F05-A774-685865978A1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{298316E7-BACA-4F05-A774-685865978A1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{298316E7-BACA-4F05-A774-685865978A1A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E2519492-18B3-4047-B385-4E05906BE76A} = {E2629311-E05A-42C5-98A1-F757BCA32ABC}
+		{B84C8110-47B2-49AE-8356-B9EA2E05C222} = {E2629311-E05A-42C5-98A1-F757BCA32ABC}
+		{298316E7-BACA-4F05-A774-685865978A1A} = {E2519492-18B3-4047-B385-4E05906BE76A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0292E5FB-459D-4879-9FD9-379AAE8E1D8E}
+	EndGlobalSection
+EndGlobal
