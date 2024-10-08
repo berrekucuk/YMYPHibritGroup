@@ -5,7 +5,7 @@ namespace YMYPHibritGroup.API.Model.Repositories
 {
     public class ProductRepository
     {
-        //Static kullanmamızım amacı program çalıştığınızda bir kere açılması ve sürekli yenilenmemesi istediğimiz için.
+        //Static kullanmamızım amacı program çalıştığınızda ilk nesne örneğini oluşturur ve memory de sürekli oluşmamış olur.Bir kere newlemek yeterli olucaktır.
         private static List<Product> Products { get; set; }
 
         static ProductRepository()

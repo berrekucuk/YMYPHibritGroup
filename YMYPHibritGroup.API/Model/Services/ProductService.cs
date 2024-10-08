@@ -56,7 +56,7 @@ namespace YMYPHibritGroup.API.Model.Services
         }
 
 
-        public ProductDto AddProduct(AddProductDto addProductDto)
+        public ProductDto AddProduct(AddProductRequest addProductDto)
         {
             var product = new Product
             {
@@ -78,7 +78,7 @@ namespace YMYPHibritGroup.API.Model.Services
             };
         }
 
-        public void UpdateProduct(UpdateProductDto updateProductDto)
+        public void UpdateProduct(UpdateProductRequest updateProductDto)
         {
             var anyProduct = productRepository.GetProduct(updateProductDto.Id);
 

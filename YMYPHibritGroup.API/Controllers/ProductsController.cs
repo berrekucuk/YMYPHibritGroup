@@ -9,31 +9,24 @@ namespace YMYPHibritGroup.API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        //complex type => class => request body(json)
+        //readonly => Tekrar newlenmesini yani nesne örneğinin alınmasını engeller.
 
-        //simple type => int,double,string,datetime => request url query string
+        private readonly ProductService _productService = new(); // Constructor ile aynı işlemi yapar.
 
-        private ProductService ProductService;
 
-        public ProductsController()
-        {
-            ProductService = new ProductService();
-        }
 
         //Endpoint
         [HttpGet]
-        public IActionResult GetProduct()
-        {
-            return Ok(ProductService.GetProducts());
-        }
+        public IActionResult GetProduct() => Ok(_productService.GetProducts());
 
-        [HttpGet("{productId}")]
+
+        [HttpGet("{productId:int}")]
         public IActionResult GetProductById(int productId)
         {
-            return Ok(ProductService.GetProductById(productId));
+            return Ok(_productService.GetProductById(productId));
         }
 
-        [HttpGet("{pageSize}/{pageCount}")]
+        [HttpGet("{pageSize:int}/{pageCount:int}")]
         public IActionResult GetPagedProduct(int pageSize, int pageCount)
         {
             return Ok();
@@ -41,21 +34,21 @@ namespace YMYPHibritGroup.API.Controllers
 
 
         [HttpPost]
-        public IActionResult AddProduct(AddProductDto request)
+        public IActionResult AddProduct(AddProductRequest request)
         {
-            var product = ProductService.AddProduct(request);
+            var product = _productService.AddProduct(request);
             return Created($"api/products/{product.Id}",product);
         }
 
         [HttpPut]
-        public IActionResult UpdateProduct(UpdateProductDto request)
+        public IActionResult UpdateProduct(UpdateProductRequest request)
         {
-            ProductService.UpdateProduct(request);
+            _productService.UpdateProduct(request);
 
             return NoContent();
         }
 
-        [HttpPatch("stock/{stock}")]
+        [HttpPatch("stock/{stock:int}")]
         public IActionResult UpdateProductStock(int stock )
         {
             //ProductService.UpdateProduct(request);
@@ -63,7 +56,7 @@ namespace YMYPHibritGroup.API.Controllers
             return NoContent();
         }
 
-        [HttpPatch("price/{price}")]
+        [HttpPatch("price/{price:nt}")]
         public IActionResult UpdateProductPrice(int price)
         {
             //ProductService.UpdateProduct(request);
@@ -71,10 +64,10 @@ namespace YMYPHibritGroup.API.Controllers
             return NoContent();
         }
 
-        [HttpDelete]
+        [HttpDelete("{productId:int}")]
         public IActionResult DeleteProduct(int productId)
         {
-            ProductService.DeleteProduct(productId);
+            _productService.DeleteProduct(productId);
 
             return NoContent();
         }
