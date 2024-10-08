@@ -47,12 +47,6 @@ namespace YMYPHibritGroup.API.Controllers
             return Created($"api/products/{product.Id}",product);
         }
 
-        [HttpPost("/api/Category")]
-        public IActionResult AddCategory(AddCategoryDto request)
-        {            
-            return Created(string.Empty,null);
-        }
-
         [HttpPut]
         public IActionResult UpdateProduct(UpdateProductDto request)
         {
