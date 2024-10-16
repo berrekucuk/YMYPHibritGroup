@@ -31,11 +31,5 @@ namespace DelegateAndEvents
         //}
     }
 
-    public class Calculator
-    {
-        public int Calculate(int x, int y,int z, MultiplyDelegate multiplyDelegate)
-        {
-            return multiplyDelegate(x, y, z);
-        }
-    }
+   
 }
