@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using YMYPHibritGroup.API.Model.Repositories.Entities;
 using YMYPHibritGroup.API.Model.Services;
 using YMYPHibritGroup.API.Model.Services.DTO;
 
@@ -17,13 +19,36 @@ namespace YMYPHibritGroup.API.Controllers
 
         //Endpoint
         [HttpGet]
-        public IActionResult GetProduct() => Ok(_productService.GetProducts());
+        public IActionResult GetProducts()
+        {
+            var result = _productService.GetProducts();
+
+            //ObjectResult = Hangi status kodunu verirsen onu döner.
+            return new ObjectResult(result)
+            {
+                StatusCode = (int)result.Status
+            };
+        }
 
 
         [HttpGet("{productId:int}")]
         public IActionResult GetProductById(int productId)
         {
-            return Ok(_productService.GetProductById(productId));
+            var result = _productService.GetProductById(productId);
+
+            if(result.Status == HttpStatusCode.NoContent)
+            {
+                return new ObjectResult(null)
+                {
+                    StatusCode = (int)result.Status
+                };
+            }
+
+            return new ObjectResult(result)
+            {
+                StatusCode = (int)result.Status
+            };
+
         }
 
         [HttpGet("{pageSize:int}/{pageCount:int}")]
@@ -36,30 +61,36 @@ namespace YMYPHibritGroup.API.Controllers
         [HttpPost]
         public IActionResult AddProduct(AddProductRequest request)
         {
-            var product = _productService.AddProduct(request);
-            return Created($"api/products/{product.Id}",product);
+            var result = _productService.AddProduct(request);
+
+            return new ObjectResult(result)
+            {
+                StatusCode = (int)result.Status
+            };
+            
         }
 
         [HttpPut]
         public IActionResult UpdateProduct(UpdateProductRequest request)
         {
-            _productService.UpdateProduct(request);
+            var result = _productService.UpdateProduct(request);
 
-            return NoContent();
+            return new ObjectResult(result)
+            {
+                StatusCode = (int)result.Status
+            };
         }
 
         [HttpPatch("stock/{stock:int}")]
         public IActionResult UpdateProductStock(int stock )
-        {
-            //ProductService.UpdateProduct(request);
+        {            
 
             return NoContent();
         }
 
-        [HttpPatch("price/{price:nt}")]
+        [HttpPatch("price/{price:int}")]
         public IActionResult UpdateProductPrice(int price)
         {
-            //ProductService.UpdateProduct(request);
 
             return NoContent();
         }
@@ -67,9 +98,21 @@ namespace YMYPHibritGroup.API.Controllers
         [HttpDelete("{productId:int}")]
         public IActionResult DeleteProduct(int productId)
         {
-            _productService.DeleteProduct(productId);
+            var result = _productService.DeleteProduct(productId);
 
-            return NoContent();
+            if(result.Status == HttpStatusCode.NoContent)
+            {
+                return new ObjectResult(null)
+                {
+                    StatusCode = (int)result.Status
+                };
+            }
+
+            return new ObjectResult(result)
+            {
+                StatusCode = (int)result.Status
+            };
         }
+        
     }
 }

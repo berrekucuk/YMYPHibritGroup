@@ -1,4 +1,5 @@
-﻿using YMYPHibritGroup.API.Model.Repositories;
+﻿using System.Net;
+using YMYPHibritGroup.API.Model.Repositories;
 using YMYPHibritGroup.API.Model.Repositories.Entities;
 using YMYPHibritGroup.API.Model.Services.DTO;
 
@@ -15,7 +16,7 @@ namespace YMYPHibritGroup.API.Model.Services
             productRepository = new ProductRepository();
         }
 
-        public List<ProductDto> GetProducts()
+        public ServiceResult<List<ProductDto>> GetProducts()
         {
             var products = productRepository.GetProducts();
 
@@ -33,31 +34,53 @@ namespace YMYPHibritGroup.API.Model.Services
 
                 productsWithTax.Add(productDto);
             }
-            return productsWithTax;
+            return ServiceResult<List<ProductDto>>.Success(productsWithTax,HttpStatusCode.OK);
 
         }
 
-        public ProductDto GetProductById(int productId)
+        public ServiceResult<ProductDto> GetProductById(int productId)
         {
             var product = productRepository.GetProduct(productId);
 
             if(product is null)
             {
-                throw new Exception("Product not found");
+                return ServiceResult<ProductDto>.Failure("Ürün bulunamadı", HttpStatusCode.NotFound);
             }
 
-            return new ProductDto
+            var productDto = new ProductDto
             {
                 Id = product.Id,
                 Name = product.Name,
                 Price = CalculateTax(product.Price,TaxRate),
                 Stock = product.Stock,
             };
+
+            return ServiceResult<ProductDto>.Success(productDto,HttpStatusCode.OK);
         }
 
 
-        public ProductDto AddProduct(AddProductRequest addProductDto)
+        public ServiceResult<ProductDto> AddProduct(AddProductRequest addProductDto)
         {
+
+            //Validator with Thirty Party(Database, API request)
+
+
+            // Success => void
+            // Success => return object   
+            // Error => errors
+
+            //ServiceResult : Burada dönüş tipi(hem hata hem olumlu) için bu sınfı yaptık.
+
+            var hasProduct = productRepository.Any(p => p.Name == addProductDto.Name);
+
+            if (hasProduct)
+            {
+
+                return ServiceResult<ProductDto>.Failure("Kaydetmeye çalıştığınız ürün ismi veritabanında bulunmaktadır.");
+               
+            }
+
+
             var product = new Product
             {
                 Id = GenerateId(),
@@ -69,40 +92,47 @@ namespace YMYPHibritGroup.API.Model.Services
             
             product = productRepository.AddProduct(product);
 
-            return new ProductDto
+            var newProductDto = new ProductDto
             {
                 Id = product.Id,
                 Name = product.Name,
                 Price = CalculateTax(product.Price, TaxRate),
                 Stock = product.Stock,
             };
+
+            return ServiceResult<ProductDto>.Success(newProductDto, HttpStatusCode.Created);
+            
         }
 
-        public void UpdateProduct(UpdateProductRequest updateProductDto)
+        public ServiceResult UpdateProduct(UpdateProductRequest updateProductDto)
         {
             var anyProduct = productRepository.GetProduct(updateProductDto.Id);
 
             if(anyProduct is null)
             {
-                throw new Exception("Product not found");
+                return ServiceResult.Failure("Güncellenecek ürün bulunmadı",HttpStatusCode.NotFound);
             }
 
             anyProduct.Name = updateProductDto.Name;
             anyProduct.Price = updateProductDto.Price;
 
             productRepository.UpdateProduct(anyProduct);
+
+            return ServiceResult.Success(HttpStatusCode.NoContent);
         }
 
-        public void DeleteProduct(int productId)
+        public ServiceResult DeleteProduct(int productId)
         {
             var anyProduct = productRepository.GetProduct(productId);
 
             if (anyProduct is null)
             {
-                throw new Exception("Product not found");
+                return ServiceResult.Failure("Silinecek ürün bulunamadı", HttpStatusCode.NotFound);
             }
 
             productRepository.DeleteProduct(productId);
+
+            return ServiceResult.Success(HttpStatusCode.NoContent);
         }
 
 
