@@ -9,13 +9,13 @@ namespace YMYPHibritGroup.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController : CustomControllerBase
     {
         //readonly => Tekrar newlenmesini yani nesne örneğinin alınmasını engeller.
 
         private readonly ProductService _productService = new(); // Constructor ile aynı işlemi yapar.
 
-
+        
 
         //Endpoint
         [HttpGet]
@@ -23,11 +23,7 @@ namespace YMYPHibritGroup.API.Controllers
         {
             var result = _productService.GetProducts();
 
-            //ObjectResult = Hangi status kodunu verirsen onu döner.
-            return new ObjectResult(result)
-            {
-                StatusCode = (int)result.Status
-            };
+            return CreateObjectResult(result);
         }
 
 
@@ -36,18 +32,7 @@ namespace YMYPHibritGroup.API.Controllers
         {
             var result = _productService.GetProductById(productId);
 
-            if(result.Status == HttpStatusCode.NoContent)
-            {
-                return new ObjectResult(null)
-                {
-                    StatusCode = (int)result.Status
-                };
-            }
-
-            return new ObjectResult(result)
-            {
-                StatusCode = (int)result.Status
-            };
+            return CreateObjectResult(result);
 
         }
 
@@ -63,10 +48,7 @@ namespace YMYPHibritGroup.API.Controllers
         {
             var result = _productService.AddProduct(request);
 
-            return new ObjectResult(result)
-            {
-                StatusCode = (int)result.Status
-            };
+            return CreateObjectResult(result);
             
         }
 
@@ -75,10 +57,7 @@ namespace YMYPHibritGroup.API.Controllers
         {
             var result = _productService.UpdateProduct(request);
 
-            return new ObjectResult(result)
-            {
-                StatusCode = (int)result.Status
-            };
+            return CreateObjectResult(result);
         }
 
         [HttpPatch("stock/{stock:int}")]
@@ -100,18 +79,7 @@ namespace YMYPHibritGroup.API.Controllers
         {
             var result = _productService.DeleteProduct(productId);
 
-            if(result.Status == HttpStatusCode.NoContent)
-            {
-                return new ObjectResult(null)
-                {
-                    StatusCode = (int)result.Status
-                };
-            }
-
-            return new ObjectResult(result)
-            {
-                StatusCode = (int)result.Status
-            };
+            return CreateObjectResult(result);
         }
         
     }
