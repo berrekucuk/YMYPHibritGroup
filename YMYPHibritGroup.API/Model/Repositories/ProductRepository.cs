@@ -3,7 +3,7 @@ using YMYPHibritGroup.API.Model.Repositories.Entities;
 
 namespace YMYPHibritGroup.API.Model.Repositories
 {
-    public class ProductRepository
+    public class ProductRepository : IProductRepository
     {
         //Static kullanmamızım amacı program çalıştığınızda ilk nesne örneğini oluşturur ve memory de sürekli oluşmamış olur.Bir kere newlemek yeterli olucaktır.
         private static List<Product> Products { get; set; }

@@ -5,20 +5,23 @@ using YMYPHibritGroup.API.Model.Services.DTO;
 
 namespace YMYPHibritGroup.API.Model.Services
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
-        private ProductRepository productRepository;
+        private IProductRepository _productRepository;
+        private SeoHelper _seoHelper;
 
         private const decimal TaxRate = 1.20m;
 
-        public ProductService()
+        public ProductService(IProductRepository productRepository, SeoHelper seoHelper)
         {
-            productRepository = new ProductRepository();
+            _productRepository = productRepository;
+
+            _seoHelper = seoHelper;
         }
 
         public ServiceResult<List<ProductDto>> GetProducts()
         {
-            var products = productRepository.GetProducts();
+            var products = _productRepository.GetProducts();
 
             var productsWithTax = new List<ProductDto>();
 
@@ -40,7 +43,7 @@ namespace YMYPHibritGroup.API.Model.Services
 
         public ServiceResult<ProductDto> GetProductById(int productId)
         {
-            var product = productRepository.GetProduct(productId);
+            var product = _productRepository.GetProduct(productId);
 
             if(product is null)
             {
@@ -71,7 +74,7 @@ namespace YMYPHibritGroup.API.Model.Services
 
             //ServiceResult : Burada dönüş tipi(hem hata hem olumlu) için bu sınfı yaptık.
 
-            var hasProduct = productRepository.Any(p => p.Name == addProductDto.Name);
+            var hasProduct = _productRepository.Any(p => p.Name == addProductDto.Name);
 
             if (hasProduct)
             {
@@ -90,7 +93,7 @@ namespace YMYPHibritGroup.API.Model.Services
                 Barcode = GenerateBarcode()
             };
             
-            product = productRepository.AddProduct(product);
+            product = _productRepository.AddProduct(product);
 
             var newProductDto = new ProductDto
             {
@@ -106,7 +109,7 @@ namespace YMYPHibritGroup.API.Model.Services
 
         public ServiceResult UpdateProduct(UpdateProductRequest updateProductDto)
         {
-            var anyProduct = productRepository.GetProduct(updateProductDto.Id);
+            var anyProduct = _productRepository.GetProduct(updateProductDto.Id);
 
             if(anyProduct is null)
             {
@@ -116,21 +119,21 @@ namespace YMYPHibritGroup.API.Model.Services
             anyProduct.Name = updateProductDto.Name;
             anyProduct.Price = updateProductDto.Price;
 
-            productRepository.UpdateProduct(anyProduct);
+            _productRepository.UpdateProduct(anyProduct);
 
             return ServiceResult.Success(HttpStatusCode.NoContent);
         }
 
         public ServiceResult DeleteProduct(int productId)
         {
-            var anyProduct = productRepository.GetProduct(productId);
+            var anyProduct = _productRepository.GetProduct(productId);
 
             if (anyProduct is null)
             {
                 return ServiceResult.Failure("Silinecek ürün bulunamadı", HttpStatusCode.NotFound);
             }
 
-            productRepository.DeleteProduct(productId);
+            _productRepository.DeleteProduct(productId);
 
             return ServiceResult.Success(HttpStatusCode.NoContent);
         }
@@ -143,7 +146,7 @@ namespace YMYPHibritGroup.API.Model.Services
 
         private int GenerateId()
         {
-            var count = productRepository.GetProductCount();
+            var count = _productRepository.GetProductCount();
 
             return count + 1;
         }

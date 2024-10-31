@@ -13,9 +13,11 @@ namespace YMYPHibritGroup.API.Controllers
     {
         //readonly => Tekrar newlenmesini yani nesne örneğinin alınmasını engeller.
 
-        private readonly ProductService _productService = new(); // Constructor ile aynı işlemi yapar.
-
-        
+        private readonly IProductService _productService; // Constructor ile aynı işlemi yapar.        
+        public ProductsController(IProductService productService)
+        {
+            _productService = productService;
+        }
 
         //Endpoint
         [HttpGet]
