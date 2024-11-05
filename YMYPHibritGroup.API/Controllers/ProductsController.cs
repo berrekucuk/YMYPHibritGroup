@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using YMYPHibritGroup.API.Filters;
 using YMYPHibritGroup.API.Model.Repositories.Entities;
 using YMYPHibritGroup.API.Model.Services;
 using YMYPHibritGroup.API.Model.Services.DTO;
@@ -20,10 +21,14 @@ namespace YMYPHibritGroup.API.Controllers
         }
 
         //Endpoint
+        [MyActionFilter]
+        //[PerformanceResourceFilter]
+        [MyResourceFilter]
         [HttpGet]
         public IActionResult GetProducts()
         {
-            var result = _productService.GetProducts();
+            var result = _productService.GetAll();
+            Thread.Sleep(2500);
 
             return CreateObjectResult(result);
         }
@@ -32,7 +37,7 @@ namespace YMYPHibritGroup.API.Controllers
         [HttpGet("{productId:int}")]
         public IActionResult GetProductById(int productId)
         {
-            var result = _productService.GetProductById(productId);
+            var result = _productService.GetById(productId);
 
             return CreateObjectResult(result);
 
@@ -48,38 +53,41 @@ namespace YMYPHibritGroup.API.Controllers
         [HttpPost]
         public IActionResult AddProduct(AddProductRequest request)
         {
-            var result = _productService.AddProduct(request);
+            var result = _productService.Add(request);
 
             return CreateObjectResult(result);
             
         }
 
+        [ServiceFilter<NotFoundProductFilter>] //Constructor kullandığımız için böyle yapıyoruz.
         [HttpPut]
         public IActionResult UpdateProduct(UpdateProductRequest request)
         {
-            var result = _productService.UpdateProduct(request);
+            var result = _productService.Update(request);
 
             return CreateObjectResult(result);
         }
 
-        [HttpPatch("stock/{stock:int}")]
-        public IActionResult UpdateProductStock(int stock )
-        {            
+        [HttpPatch("stock")]
+        public IActionResult UpdateProductStock(UpdateProductStockRequest request)
+        {
+            var result = _productService.UpdateStock(request.ProductId, request.Stock);
 
-            return NoContent();
+            return CreateObjectResult(result);
         }
 
-        [HttpPatch("price/{price:int}")]
-        public IActionResult UpdateProductPrice(int price)
+        [HttpPatch("price")]
+        public IActionResult UpdateProductPrice(UpdateProductPriceRequest request)
         {
+            var result = _productService.UpdatePrice(request.ProductId, request.Price);
 
-            return NoContent();
+            return CreateObjectResult(result);
         }
 
         [HttpDelete("{productId:int}")]
         public IActionResult DeleteProduct(int productId)
         {
-            var result = _productService.DeleteProduct(productId);
+            var result = _productService.Delete(productId);
 
             return CreateObjectResult(result);
         }

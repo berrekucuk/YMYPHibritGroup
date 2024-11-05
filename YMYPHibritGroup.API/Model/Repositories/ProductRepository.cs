@@ -25,25 +25,25 @@ namespace YMYPHibritGroup.API.Model.Repositories
         //    return Products;
         //}
 
-        public List<Product> GetProducts() => Products;
+        public List<Product> GetAll() => Products;
 
         public bool Any(Func<Product, bool> fun)
         {
             return Products.Any(fun);
         } 
 
-        public Product? GetProduct(int id)
+        public Product? Get(int id)
         {
             return Products.FirstOrDefault(p => p.Id == id);
         }
 
-        public Product AddProduct(Product product)
+        public Product Add(Product product)
         {
             Products.Add(product);
             return product;
         }
 
-        public Product UpdateProduct(Product product)
+        public Product Update(Product product)
         {
             var existingProduct = Products.FirstOrDefault(p => p.Id == product.Id);
             existingProduct.Name = product.Name;
@@ -53,10 +53,22 @@ namespace YMYPHibritGroup.API.Model.Repositories
             return existingProduct;
         }
 
-        public int GetProductCount() =>  Products.Count();
+        public void UpdatePrice(int id, decimal price)
+        {
+            var product = Products.Single(p => p.Id == id);
+            product.Price = price;
+        }
+
+        public void UpdateStock(int id, int stock)
+        {
+            var product = Products.Single(x => x.Id == id);
+            product.Stock = stock;
+        }
+
+        public int GetCount() =>  Products.Count();
         
    
-        public void DeleteProduct(int id)
+        public void Delete(int id)
         {
             var product = Products.FirstOrDefault(p => p.Id ==id);
             Products.Remove(product);

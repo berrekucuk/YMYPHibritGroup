@@ -4,13 +4,15 @@ namespace YMYPHibritGroup.API.Model.Repositories
 {
     public interface IProductRepository
     {
-        List<Product> GetProducts();
+        List<Product> GetAll();
         bool Any(Func<Product, bool> fun);
-        Product? GetProduct(int id);
-        Product AddProduct(Product product);
-        Product UpdateProduct(Product product);
+        Product? Get(int id);
+        Product Add(Product product);
+        Product Update(Product product);
+        void UpdatePrice(int id, decimal price);
+        void UpdateStock(int id, int stock);
 
-        void DeleteProduct(int id);
-        int GetProductCount();
+        void Delete(int id);
+        int GetCount();
     }
 }

@@ -4,10 +4,12 @@ namespace YMYPHibritGroup.API.Model.Services
 {
     public interface IProductService
     {
-        ServiceResult<List<ProductDto>> GetProducts();
-        ServiceResult<ProductDto> GetProductById(int productId);
-        ServiceResult<ProductDto> AddProduct(AddProductRequest addProductDto);
-        ServiceResult UpdateProduct(UpdateProductRequest updateProductDto);
-        ServiceResult DeleteProduct(int productId);
+        ServiceResult<List<ProductDto>> GetAll();
+        ServiceResult<ProductDto> GetById(int productId);
+        ServiceResult<ProductDto> Add(AddProductRequest addProductDto);
+        ServiceResult Update(UpdateProductRequest updateProductDto);
+        ServiceResult UpdateStock(int productId, int stock);
+        ServiceResult UpdatePrice(int productId, decimal price);
+        ServiceResult Delete(int productId);
     }
 }

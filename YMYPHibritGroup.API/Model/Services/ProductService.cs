@@ -8,20 +8,18 @@ namespace YMYPHibritGroup.API.Model.Services
     public class ProductService : IProductService
     {
         private IProductRepository _productRepository;
-        private SeoHelper _seoHelper;
+        
 
         private const decimal TaxRate = 1.20m;
 
-        public ProductService(IProductRepository productRepository, SeoHelper seoHelper)
+        public ProductService(IProductRepository productRepository)
         {
             _productRepository = productRepository;
-
-            _seoHelper = seoHelper;
         }
 
-        public ServiceResult<List<ProductDto>> GetProducts()
+        public ServiceResult<List<ProductDto>> GetAll()
         {
-            var products = _productRepository.GetProducts();
+            var products = _productRepository.GetAll();
 
             var productsWithTax = new List<ProductDto>();
 
@@ -41,9 +39,9 @@ namespace YMYPHibritGroup.API.Model.Services
 
         }
 
-        public ServiceResult<ProductDto> GetProductById(int productId)
+        public ServiceResult<ProductDto> GetById(int productId)
         {
-            var product = _productRepository.GetProduct(productId);
+            var product = _productRepository.Get(productId);
 
             if(product is null)
             {
@@ -62,7 +60,7 @@ namespace YMYPHibritGroup.API.Model.Services
         }
 
 
-        public ServiceResult<ProductDto> AddProduct(AddProductRequest addProductDto)
+        public ServiceResult<ProductDto> Add(AddProductRequest addProductDto)
         {
 
             //Validator with Thirty Party(Database, API request)
@@ -93,7 +91,7 @@ namespace YMYPHibritGroup.API.Model.Services
                 Barcode = GenerateBarcode()
             };
             
-            product = _productRepository.AddProduct(product);
+            product = _productRepository.Add(product);
 
             var newProductDto = new ProductDto
             {
@@ -107,9 +105,9 @@ namespace YMYPHibritGroup.API.Model.Services
             
         }
 
-        public ServiceResult UpdateProduct(UpdateProductRequest updateProductDto)
+        public ServiceResult Update(UpdateProductRequest updateProductDto)
         {
-            var anyProduct = _productRepository.GetProduct(updateProductDto.Id);
+            var anyProduct = _productRepository.Get(updateProductDto.Id);
 
             if(anyProduct is null)
             {
@@ -119,21 +117,51 @@ namespace YMYPHibritGroup.API.Model.Services
             anyProduct.Name = updateProductDto.Name;
             anyProduct.Price = updateProductDto.Price;
 
-            _productRepository.UpdateProduct(anyProduct);
+            _productRepository.Update(anyProduct);
 
             return ServiceResult.Success(HttpStatusCode.NoContent);
         }
 
-        public ServiceResult DeleteProduct(int productId)
+        public ServiceResult UpdateStock(int productId, int stock)
         {
-            var anyProduct = _productRepository.GetProduct(productId);
+            var anyProduct = _productRepository.Get(productId);
+
+            if(anyProduct is null)
+            {
+                return ServiceResult.Failure("Stok güncellenecek ürün bulunamadı", HttpStatusCode.NotFound);
+            }
+
+            _productRepository.UpdateStock(productId, stock);
+
+            return ServiceResult.Success(HttpStatusCode.NoContent);
+        }
+
+        public ServiceResult UpdatePrice(int productId, decimal price)
+        {
+            var anyProduct = _productRepository.Get(productId);
+
+            if(anyProduct is null)
+            {
+                return ServiceResult.Failure("Fiyat güncellenecek ürün bulunamadı", HttpStatusCode.NotFound);
+            }
+
+            _productRepository.UpdatePrice(productId, price);
+
+            return ServiceResult.Success(HttpStatusCode.NoContent);
+        }
+
+
+
+        public ServiceResult Delete(int productId)
+        {
+            var anyProduct = _productRepository.Get(productId);
 
             if (anyProduct is null)
             {
                 return ServiceResult.Failure("Silinecek ürün bulunamadı", HttpStatusCode.NotFound);
             }
 
-            _productRepository.DeleteProduct(productId);
+            _productRepository.Delete(productId);
 
             return ServiceResult.Success(HttpStatusCode.NoContent);
         }
@@ -146,7 +174,7 @@ namespace YMYPHibritGroup.API.Model.Services
 
         private int GenerateId()
         {
-            var count = _productRepository.GetProductCount();
+            var count = _productRepository.GetCount();
 
             return count + 1;
         }
