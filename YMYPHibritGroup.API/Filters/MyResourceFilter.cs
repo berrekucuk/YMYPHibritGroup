@@ -9,13 +9,13 @@ namespace YMYPHibritGroup.API.Filters
     {
         //Sadece controllerde kullanılır.
 
-        //Response olduğu zaman çalışır.
+        //Request geldiği zaman çalışır.
         public void OnResourceExecuting(ResourceExecutingContext context)
         {
             Console.WriteLine("OnResourceExecuting çalıştı");
         }
 
-        //Request geldiği zaman çalışır.
+        //Response olduğu zaman çalışır.
         public void OnResourceExecuted(ResourceExecutedContext context)
         {
 

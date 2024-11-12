@@ -22,7 +22,7 @@ builder.Services.AddScoped<NotFoundProductFilter>();
 builder.Services.AddMvc(opt => { 
     
     //add global filter
-    //opt.Filters.Add<MyResourceFilter>();
+    //opt.Filters.Add<MyResourceFilter>(); //Filterlarý burada tanýmlarsak tüm enpointler için geçerlidir.
 
     opt.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;}); //C# kendi hata kodunu kapatmayý ve sadece Fluent Validation çalýþmasýný saðlar.
 
@@ -36,6 +36,38 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
+
+
+app.Use(async (context, next) =>
+{
+    Console.WriteLine("1.middleware request");
+    var request = context.Request;
+
+    await next();
+
+    Console.WriteLine("1.middleware response");
+
+    var response = context.Response;
+});
+
+app.Use(async (context, next) =>
+{
+    Console.WriteLine("2.middleware request");
+    var request = context.Request;
+
+    await next();
+
+    Console.WriteLine("2.middleware response");
+
+    var response = context.Response;
+});
+
+//app.Run(context =>
+//{
+//    Console.WriteLine("Terminal middleware");
+
+//    return Task.CompletedTask;
+//});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
