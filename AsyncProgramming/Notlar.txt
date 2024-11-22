@@ -1,0 +1,18 @@
+﻿
+-Asenkron kod yazdığımızda geriye bişey dönmeyeceksek "Task" olarak yazılacak.
+	Eğer geriye bişey dönülecekse "Task<TResult>" olarak yazılacak.
+
+-Bir asekron yapılı method kullanılırken hemen bir alt satırında cevabını beklemiyorsak işlemlerin en sonuna "await" yazacağız.
+
+-Asenkron bir yapıda kulladığımız bir metodun yeni bir thread kullanıp kullanmayacağı hakkında net bir bilgimiz yok.
+
+-Asenkron programa bir multithread değildir. Asenkron programlama var olan threadleri bloklamama tekniğidir.
+
+-asnyc ve await => Microsoft tarafından geliştirilmiş bir patterndır. Asenkron methodlarda kullanılan asenkron kodları, senkron kod gibi yazmamızı imkan veren bir tekniktir.
+
+-İşlem yaptığımız kodda await koymazsak sonucu alamayız.
+
+-ContinueWith,.NET’te bir Task tamamlandıktan sonra çalıştırılacak yeni bir işlemi tanımlamak için kullanılır. Görevleri sıralı veya bağımsız şekilde zincirlemeyi sağlar.
+
+-Multithread, eğer bir operasyonu aynı anda başlatmak istiyorak ve CPU yoracak bir işlemse multithread yazılır.
+

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace AsyncProgramming
 {
     internal class ServiceHelper
@@ -12,26 +13,89 @@ namespace AsyncProgramming
         {
             var httpClient = new HttpClient();
 
-            httpClient.GetAsync("http://www.google.com");
 
-
-
+            httpClient.GetAsync("https://www.google.com");
         }
 
-
-        public async Task<string> MakeRequestToGoogle()
+        public void MakeRequestToGoogleAsBad()
         {
             var httpClient = new HttpClient();
 
-            var responseAsTask = httpClient.GetAsync("http://www.google.com");
 
-            var kdv = 10 * 1.20m;
-
-            var response = await responseAsTask;
-
-            var content = await response.Content.ReadAsStringAsync();
-
-            return content;
+            var responseAsTask = httpClient.GetAsync("https://www.google.com").Result;
         }
+
+        public Task MakeRequestToGoogleAsBad2()
+        {
+            var httpClient = new HttpClient();
+
+
+            var responseAsTask = httpClient.GetAsync("https://www.google.com");
+
+            var responseAsTask2 = httpClient.GetAsync("https://www.facebook.com");
+
+
+            Task.WaitAll(responseAsTask, responseAsTask2);
+
+            return Task.CompletedTask;
+        }
+
+        public async Task MakeRequestToGoogle()
+        {
+            var httpClient = new HttpClient();
+
+
+            var responseAsTask = httpClient.GetAsync("https://www.google.com");
+
+            var responseAsTask2 = httpClient.GetAsync("https://www.facebook.com");
+
+            var responseAsTask3 = httpClient.GetAsync("https://www.hepsiburada.com");
+
+            // db action
+
+
+            var responseAsArray = await Task.WhenAll(responseAsTask, responseAsTask2, responseAsTask3);
+
+
+            var x = responseAsArray[2];
+        }
+
+
+        public Task<HttpResponseMessage> MakeLogging(string message)
+        {
+            var httpClient = new HttpClient();
+            return httpClient.GetAsync("https://www.google.com");
+        }
+
+
+        public Task MakeLogging2(string message)
+        {
+            var httpClient = new HttpClient();
+            httpClient.GetAsync("https://www.google.com");
+
+            return Task.CompletedTask;
+            ;
+        }
+
+
+        public Task<HttpResponseMessage> MakeLogging4(string message)
+        {
+            var httpClient = new HttpClient();
+            return httpClient.GetAsync("https://www.google.com");
+        }
+
+        public Task MakeLogging5(string message)
+        {
+            var httpClient = new HttpClient();
+            httpClient.GetAsync("https://www.google.com").ContinueWith(x =>
+            {
+                if (x.IsFaulted)
+                {
+                    //logging
+                }
+            });
+            return Task.CompletedTask;
+        }
+
     }
 }
