@@ -70,23 +70,6 @@ namespace YMYPHibritGroup.API.Model.Services
                 Status = status
             };
         }
-    }
+    }  
 
-
-    //public class Client
-    //{
-    //    public void Y()
-    //    {
-    //        var result = X();
-    //        //Unboxing
-    //        int productId = (int)result.Data;
-    //    }
-
-    //    public ServiceResult X()
-    //    {
-    //        int newProductId = 10;
-    //        //Boxing
-    //        return new ServiceResult() { Data = newProductId };
-    //    }
-    //}
 }
