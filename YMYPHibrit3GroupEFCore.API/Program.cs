@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using YMYPHibrit3GroupEFCore.API.Model.Repositories;
 using YMYPHibrit3GroupEFCore.API.Model.Repositories.Entities;
+using YMYPHibrit3GroupEFCore.API.Model.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
     options.UseSqlServer(connectionString);
 });
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService,ProductService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
