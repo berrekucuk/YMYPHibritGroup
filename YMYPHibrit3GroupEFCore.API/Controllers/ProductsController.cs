@@ -7,7 +7,7 @@ namespace YMYPHibrit3GroupEFCore.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController(ProductService productService) : CustomControllerBase
+    public class ProductsController(IProductService productService) : CustomControllerBase
     {
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -20,5 +20,24 @@ namespace YMYPHibrit3GroupEFCore.API.Controllers
         {
             return CreateObjectResult(await productService.Get(id));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(AddProductRequest request)
+        {
+            return CreateObjectResult(await productService.AddAsync(request));  
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateProductRequest request)
+        {
+            return CreateObjectResult(await productService.UpdateAsync(request));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            return CreateObjectResult(await productService.DeleteAsync(id));
+        }
+        
     }
 }

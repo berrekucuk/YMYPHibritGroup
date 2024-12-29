@@ -7,5 +7,7 @@ namespace YMYPHibrit3GroupEFCore.API.Model.Services
         Task<ServiceResult<AddProductResponse>> AddAsync(AddProductRequest request);
         Task<ServiceResult<ProductDto>> Get(int id);
         Task<ServiceResult<List<ProductDto>>> GetAllList();
+        Task<ServiceResult> UpdateAsync(UpdateProductRequest requet);
+        Task<ServiceResult> DeleteAsync(int id);
     }
 }

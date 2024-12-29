@@ -67,5 +67,28 @@ namespace YMYPHibrit3GroupEFCore.API.Model.Services
             return ServiceResult<AddProductResponse>.Success(response, HttpStatusCode.Created);
         }
 
+        public async Task<ServiceResult> UpdateAsync(UpdateProductRequest requet)
+        {
+            var productToUpdate = new Product
+            {
+                Id = requet.Id,
+                Name = requet.Name,
+                Price = requet.Price,
+                Stock = requet.Stock
+            };
+
+            await productRepository.UpdateAsyncGood(productToUpdate);
+
+            return ServiceResult.Success();
+
+        }
+
+        public async Task<ServiceResult> DeleteAsync(int id)
+        {
+            await productRepository.DeleteAsync(id);
+
+            return ServiceResult.Success(HttpStatusCode.NoContent);
+        }
+
     }
 }
