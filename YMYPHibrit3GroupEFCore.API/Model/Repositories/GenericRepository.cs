@@ -4,13 +4,13 @@ using YMYPHibrit3GroupEFCore.API.Model.Repositories.Entities;
 
 namespace YMYPHibrit3GroupEFCore.API.Model.Repositories
 {
-    public class GenericRepository<T>(AppDbContext context) where T : class
+    public class GenericRepository<T>(AppDbContext context) : IGenericRepository<T> where T : class
     {
         public readonly DbSet<T> DbSet = context.Set<T>();
 
         //productRepository.Where(x => x.Name == "test").OrderBy(x => x.price).Tolist();
         //Where : Verilen koşula (predicate) göre DbSet'teki verileri filtreler ve IQueryable olarak döner.
-        public IQueryable<T> Where(Func<T,bool> predicate)
+        public IQueryable<T> Where(Func<T, bool> predicate)
         {
             //AsQueryable: Bir koleksiyonu IQueryable türüne dönüştürür. Bu, sorgunun daha sonra veritabanına gönderilmek üzere yapılandırılmasına olanak tanır ve veritabanı tarafında işlenmesini sağlar.
             return DbSet.Where(predicate).AsQueryable();

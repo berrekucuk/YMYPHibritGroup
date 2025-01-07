@@ -38,7 +38,6 @@ namespace YMYPHibrit3GroupEFCore.API.Model.Repositories
             var state2 = context.Entry(product).State;
 
             context.Entry(product).Property(x => x.Barcode).IsModified = false;
-            context.Entry(product).Property(x => x.CategoryName).IsModified = false;
 
             await context.SaveChangesAsync();
         }

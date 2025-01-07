@@ -13,13 +13,16 @@ namespace YMYPHibrit3GroupEFCore.API.Model.Repositories.Configurations
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
             builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
-            builder.Property(x => x.CategoryName).IsRequired().HasMaxLength(50);
 
             builder.Property(x => x.Barcode).IsRequired().HasMaxLength(50);
 
             builder.Property(x => x.Price).IsRequired().HasColumnType("decimal(18,2)");
 
             builder.Property(x => x.Stock).IsRequired();
+
+            //one-to-many
+            builder.HasOne(x => x.Category).WithMany(x => x.Products).HasForeignKey(x => x.CategoryId);
+
         }
     }
 }

@@ -18,8 +18,7 @@ namespace YMYPHibrit3GroupEFCore.API.Model.Services
                 {
                     Id = p.Id,
                     Name = p.Name,
-                    Price = p.Price * 1.2m,
-                    CategoryName = p.CategoryName
+                    Price = p.Price * 1.2m
                 });
             });
 
@@ -41,8 +40,7 @@ namespace YMYPHibrit3GroupEFCore.API.Model.Services
             {
                 Id = product.Id,
                 Name = product.Name,
-                Price = product.Price * 1.2m,
-                CategoryName = product.CategoryName
+                Price = product.Price * 1.2m
             };
 
             return ServiceResult<ProductDto>.Success(productAsDto);
@@ -55,7 +53,6 @@ namespace YMYPHibrit3GroupEFCore.API.Model.Services
             {
                 Name = request.name,
                 Price = request.Price,
-                CategoryName = request.CategoryName,
                 Barcode = Guid.NewGuid().ToString(),
                 Stock = request.Stock
             };
